@@ -51,10 +51,10 @@ public class Movement : MonoBehaviour
                 if(direction.magnitude == 1f && !tryChangeSeason && checkTileAndMove(direction)) {
                     actionsPerSecondHelper -= 1;
                 }
-                else if(direction.magnitude != 1f && tryChangeSeason) {
-                    seasonsControl.ChangeSeason();
-                    actionsPerSecondHelper -= 1;
-                }
+            }
+            if(tryChangeSeason) {
+                seasonsControl.ChangeSeason();
+                actionsPerSecondHelper -= 1;
             }
         }
     }

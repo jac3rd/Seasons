@@ -167,9 +167,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'You made it through all available levels!
+  m_text: 'You will play as a very patient man.
 
-    Thanks for playing!'
+    Press <space> to start...'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -238,10 +238,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 52211611}
-    characterCount: 61
+    characterCount: 62
     spriteCount: 0
-    spaceCount: 9
-    wordCount: 10
+    spaceCount: 11
+    wordCount: 12
     linkCount: 0
     lineCount: 2
     pageCount: 1
@@ -379,6 +379,9 @@ GameObject:
   - component: {fileID: 516581713}
   - component: {fileID: 516581712}
   - component: {fileID: 516581711}
+  - component: {fileID: 516581716}
+  - component: {fileID: 516581715}
+  - component: {fileID: 516581714}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -451,6 +454,53 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &516581714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516581710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8e50ecded6424192ab13e172100710f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneTraveler: {fileID: 0}
+--- !u!114 &516581715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516581710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8e50ecded6424192ab13e172100710f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneTraveler: {fileID: 0}
+--- !u!114 &516581716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516581710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a836964076349c5bb022e16bca801f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prevSceneID: 0
+  nextSceneID: 0
+  currSceneID: 0
+  prevScene:
+    m_Handle: 0
+  nextScene:
+    m_Handle: 0
+  currScene:
+    m_Handle: 0
 --- !u!1 &871354723
 GameObject:
   m_ObjectHideFlags: 0
