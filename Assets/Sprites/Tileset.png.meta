@@ -17,6 +17,7 @@ TextureImporter:
     21300024: Fire
     21300026: Grass_Spring
     21300028: Grass_Fall
+    21300030: Grass_Autumn
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -299,7 +300,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Grass_Fall
+      name: Grass_Autumn
       rect:
         serializedVersion: 2
         x: 8
