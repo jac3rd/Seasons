@@ -23,4 +23,8 @@ public class SceneTraveler : MonoBehaviour
     public void goToNextScene() {
         SceneManager.LoadScene(nextSceneID);
     }
+
+    public void restartScene() {
+        SceneManager.LoadScene(currSceneID);
+    }
 }

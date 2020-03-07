@@ -9,21 +9,27 @@ public class Movement : MonoBehaviour
     public float actionsPerSecondHelper;
     public SeasonsControl seasonsControl;
     public SceneTraveler sceneTraveler;
+    public UIController uIController;
     public Tilemap walkable, obstacles;
-    public GameObject winText;
+    public GameObject winText,lossText;
     public Vector3 direction;
     public bool tryChangeSeason;
     public bool won = false;
+    public bool lost = false;
     public float sceneChangeDelay = 3f;
     public float timeUntilChange = 0f;
+    public int hunger = 3;
     void Start() {
         actionsPerSecondHelper = 1f;
         seasonsControl = GameObject.Find("Grid").GetComponent<SeasonsControl>();
         sceneTraveler = gameObject.GetComponent<SceneTraveler>();
+        uIController = GameObject.Find("UI").GetComponent<UIController>();
         walkable = GameObject.Find("Walkable").GetComponent<Tilemap>();
         obstacles = GameObject.Find("Obstacles").GetComponent<Tilemap>();
         winText = GameObject.Find("WinText");
         winText.SetActive(false);
+        lossText = GameObject.Find("LossText");
+        lossText.SetActive(false);
         for(int x = walkable.cellBounds.xMin; x <= walkable.cellBounds.xMax; x++) {
             for(int y = walkable.cellBounds.xMin; y <= walkable.cellBounds.yMax; y++) {
                 Vector3Int coord = new Vector3Int(x,y,0);
@@ -39,10 +45,15 @@ public class Movement : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        if(won) {
+        if(won || lost) {
             timeUntilChange += Time.deltaTime;
             if(timeUntilChange >= sceneChangeDelay) {
-                sceneTraveler.goToNextScene();
+                if(won) {
+                    sceneTraveler.goToNextScene();
+                }
+                else {
+                    sceneTraveler.restartScene();
+                }
             }
         }
         else {
@@ -55,9 +66,15 @@ public class Movement : MonoBehaviour
                     actionsPerSecondHelper -= 1;
                 }
             }
-            if(tryChangeSeason) {
+            if(tryChangeSeason && hunger > 0) {
                 seasonsControl.ChangeSeason();
                 actionsPerSecondHelper -= 1;
+                hunger--;
+                uIController.HungerUpdate();
+                if(hunger <= 0) {
+                    lost = true;
+                    lossText.SetActive(true);
+                }
             }
         }
     }
