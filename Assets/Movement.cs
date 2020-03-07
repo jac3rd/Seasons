@@ -8,12 +8,17 @@ public class Movement : MonoBehaviour
     public float actionsPerSecond = 4f;
     public float actionsPerSecondHelper;
     public SeasonsControl seasonsControl;
+    public SceneTraveler sceneTraveler;
     public Tilemap walkable, obstacles;
     public Vector3 direction;
     public bool tryChangeSeason;
+    public bool won = false;
+    public float sceneChangeDelay = 5f;
+    public float timeUntilChange = 0f;
     void Start() {
         actionsPerSecondHelper = 1f;
         seasonsControl = GameObject.Find("Grid").GetComponent<SeasonsControl>();
+        sceneTraveler = gameObject.GetComponent<SceneTraveler>();
         walkable = GameObject.Find("Walkable").GetComponent<Tilemap>();
         obstacles = GameObject.Find("Obstacles").GetComponent<Tilemap>();
         for(int x = walkable.cellBounds.xMin; x <= walkable.cellBounds.xMax; x++) {
@@ -31,17 +36,25 @@ public class Movement : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        actionsPerSecondHelper += actionsPerSecond*Time.deltaTime;
-        actionsPerSecondHelper = Mathf.Min(actionsPerSecondHelper, 1);
-        direction = new Vector3(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical"),0);
-        tryChangeSeason = Input.GetButtonDown("Jump");
-        if(actionsPerSecondHelper >= 1) {
-            if(direction.magnitude == 1f && !tryChangeSeason && checkTileAndMove(direction)) {
-                actionsPerSecondHelper -= 1;
+        if(won) {
+            timeUntilChange += Time.deltaTime;
+            if(timeUntilChange >= sceneChangeDelay) {
+                sceneTraveler.goToNextScene();
             }
-            else if(direction.magnitude != 1f && tryChangeSeason) {
-                seasonsControl.ChangeSeason();
-                actionsPerSecondHelper -= 1;
+        }
+        else {
+            actionsPerSecondHelper += actionsPerSecond*Time.deltaTime;
+            actionsPerSecondHelper = Mathf.Min(actionsPerSecondHelper, 1);
+            direction = new Vector3(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical"),0);
+            tryChangeSeason = Input.GetButtonDown("Jump");
+            if(actionsPerSecondHelper >= 1) {
+                if(direction.magnitude == 1f && !tryChangeSeason && checkTileAndMove(direction)) {
+                    actionsPerSecondHelper -= 1;
+                }
+                else if(direction.magnitude != 1f && tryChangeSeason) {
+                    seasonsControl.ChangeSeason();
+                    actionsPerSecondHelper -= 1;
+                }
             }
         }
     }
@@ -54,7 +67,7 @@ public class Movement : MonoBehaviour
         if(tileWalkable != null && tileObstacle == null) {
             transform.position = walkable.GetCellCenterLocal(cellCoord);
             if(tileWalkable.name == "Finish") {
-                //Do something about winning
+                won = true;
             }
             return true;
         }

@@ -9,7 +9,7 @@ public class SeasonsControl : MonoBehaviour
     private int seasonID;
     public string season;
     public Tilemap walkable, obstacles;
-    public TileBase water, ice, grassSummer, grassAutumn, grassWinter, grassSpring;
+    public TileBase water, ice, grassSummer, grassAutumn, grassWinter, grassSpring, wood, fire;
     // Start is called before the first frame update
     void Start() {
         seasonID = 0;
@@ -40,6 +40,10 @@ public class SeasonsControl : MonoBehaviour
                         if(tileWalkable.name == "Grass_Spring") {
                             walkable.SetTile(coord,grassSummer);
                         }
+                        else if(tileWalkable.name == "Wood") {
+                            walkable.SetTile(coord,null);
+                            obstacles.SetTile(coord,fire);
+                        }
                     }
                     break;
                 case 1:
@@ -48,13 +52,19 @@ public class SeasonsControl : MonoBehaviour
                             walkable.SetTile(coord,grassAutumn);
                         }
                     }
+                    if(tileObstacle != null) {
+                        if(tileObstacle.name == "Fire") {
+                            obstacles.SetTile(coord,null);
+                            walkable.SetTile(coord,wood);
+                        }
+                    }
                     break;
                 case 2:
                     if(tileObstacle != null && tileObstacle.name == "Water") {
                         obstacles.SetTile(coord, null);
                         walkable.SetTile(coord,ice);
                     }
-                    else if(tileWalkable != null && tileWalkable.name == "Grass_Autumn") {
+                    if(tileWalkable != null && tileWalkable.name == "Grass_Autumn") {
                         walkable.SetTile(coord,grassWinter);
                     }
                     break;
@@ -64,7 +74,7 @@ public class SeasonsControl : MonoBehaviour
                             obstacles.SetTile(coord,water);
                             walkable.SetTile(coord,null);
                         }
-                        else if(tileWalkable.name == "Grass_Winter") {
+                        if(tileWalkable.name == "Grass_Winter") {
                             walkable.SetTile(coord,grassSpring);
                         }
                     }

@@ -4,7 +4,9 @@
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
-
+VeryPatientMan/
+VeryPatientMan.zip
+*.DS_Store
 # Visual Studio cache directory
 .vs/
 
