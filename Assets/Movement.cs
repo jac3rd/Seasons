@@ -10,10 +10,11 @@ public class Movement : MonoBehaviour
     public SeasonsControl seasonsControl;
     public SceneTraveler sceneTraveler;
     public Tilemap walkable, obstacles;
+    public GameObject winText;
     public Vector3 direction;
     public bool tryChangeSeason;
     public bool won = false;
-    public float sceneChangeDelay = 5f;
+    public float sceneChangeDelay = 3f;
     public float timeUntilChange = 0f;
     void Start() {
         actionsPerSecondHelper = 1f;
@@ -21,6 +22,8 @@ public class Movement : MonoBehaviour
         sceneTraveler = gameObject.GetComponent<SceneTraveler>();
         walkable = GameObject.Find("Walkable").GetComponent<Tilemap>();
         obstacles = GameObject.Find("Obstacles").GetComponent<Tilemap>();
+        winText = GameObject.Find("WinText");
+        winText.SetActive(false);
         for(int x = walkable.cellBounds.xMin; x <= walkable.cellBounds.xMax; x++) {
             for(int y = walkable.cellBounds.xMin; y <= walkable.cellBounds.yMax; y++) {
                 Vector3Int coord = new Vector3Int(x,y,0);
@@ -68,6 +71,7 @@ public class Movement : MonoBehaviour
             transform.position = walkable.GetCellCenterLocal(cellCoord);
             if(tileWalkable.name == "Finish") {
                 won = true;
+                winText.SetActive(true);
             }
             return true;
         }
