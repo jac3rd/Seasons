@@ -14,8 +14,10 @@ public class Movement : MonoBehaviour
     public GameObject winText,lossText;
     public Vector3 direction;
     public bool tryChangeSeason;
+    public bool changingSeason = false;
+    public bool slidingOnIce = false;
     public bool won = false;
-    public bool lost = false;
+    public bool starved = false;
     public float sceneChangeDelay = 3f;
     public float timeUntilChange = 0f;
     public int hunger = 3;
@@ -45,7 +47,10 @@ public class Movement : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        if(won || lost) {
+        actionsPerSecondHelper += actionsPerSecond*Time.deltaTime;
+        actionsPerSecondHelper = Mathf.Min(actionsPerSecondHelper, 1);
+        tryChangeSeason = Input.GetButtonDown("Jump");
+        if(won || starved) {
             timeUntilChange += Time.deltaTime;
             if(timeUntilChange >= sceneChangeDelay) {
                 if(won) {
@@ -57,22 +62,27 @@ public class Movement : MonoBehaviour
             }
         }
         else {
-            actionsPerSecondHelper += actionsPerSecond*Time.deltaTime;
-            actionsPerSecondHelper = Mathf.Min(actionsPerSecondHelper, 1);
-            direction = new Vector3(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical"),0);
-            tryChangeSeason = Input.GetButtonDown("Jump");
+            if(!slidingOnIce) {
+                direction = new Vector3(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical"),0);
+            }
             if(actionsPerSecondHelper >= 1) {
-                if(direction.magnitude == 1f && !tryChangeSeason && checkTileAndMove(direction)) {
+                if(changingSeason) {
+                    actionsPerSecondHelper -= 1;
+                    changingSeason = false;
+                    seasonsControl.ChangeSeason();
+                }
+                else if(direction.magnitude == 1f && !tryChangeSeason && checkTileAndMove(direction)) {
                     actionsPerSecondHelper -= 1;
                 }
             }
             if(tryChangeSeason && hunger > 0) {
                 seasonsControl.ChangeSeason();
+                changingSeason = true;
                 actionsPerSecondHelper -= 1;
                 hunger--;
                 uIController.HungerUpdate();
                 if(hunger <= 0) {
-                    lost = true;
+                    starved = true;
                     lossText.SetActive(true);
                 }
             }
@@ -86,10 +96,15 @@ public class Movement : MonoBehaviour
         TileBase tileObstacle = obstacles.GetTile(cellCoord);
         if(tileWalkable != null && tileObstacle == null) {
             transform.position = walkable.GetCellCenterLocal(cellCoord);
-            if(tileWalkable.name == "Finish") {
+            if(tileWalkable.name == "Ice") {
+                slidingOnIce = true;
+                return true;
+            }
+            else if(tileWalkable.name == "Finish") {
                 won = true;
                 winText.SetActive(true);
             }
+            slidingOnIce = false;
             return true;
         }
         return false;
