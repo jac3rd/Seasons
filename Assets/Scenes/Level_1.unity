@@ -869,9 +869,10 @@ MonoBehaviour:
   lossText: {fileID: 0}
   direction: {x: 0, y: 0, z: 0}
   tryChangeSeason: 0
+  changingSeason: 0
   slidingOnIce: 0
   won: 0
-  lost: 0
+  starved: 0
   sceneChangeDelay: 5
   timeUntilChange: 0
   hunger: 3
