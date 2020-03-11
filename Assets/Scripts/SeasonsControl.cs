@@ -21,25 +21,24 @@ public class SeasonsControl : MonoBehaviour
     // Update is called once per frame
     public void ChangeSeason() {
         seasonID++;
-        if(seasonID >= seasons.Length) {
+        if(seasonID >= seasons.Length)
             seasonID = 0;
-        }
         season = seasons[seasonID];
         int xMin = Mathf.Min(walkable.cellBounds.xMin,obstacles.cellBounds.xMin);
         int xMax = Mathf.Max(walkable.cellBounds.xMax,obstacles.cellBounds.xMax);
         int yMin = Mathf.Min(walkable.cellBounds.yMin,obstacles.cellBounds.yMin);
         int yMax = Mathf.Max(walkable.cellBounds.yMax,obstacles.cellBounds.yMax);
-        for(int x = xMin; x <= xMax; x++) {
+        Vector3Int coord = new Vector3Int();
+        for(int x = xMin; x <= xMax; x++)
             for(int y = yMin; y <= yMax; y++) {
-                Vector3Int coord = new Vector3Int(x,y,0);
+                coord.x = x; coord.y = y;
                 TileBase tileWalkable = walkable.GetTile(coord);
                 TileBase tileObstacle = obstacles.GetTile(coord);
                 switch(seasonID) {
                 case 0:
                     if(tileWalkable != null) {
-                        if(tileWalkable.name == "Grass_Spring") {
+                        if(tileWalkable.name == "Grass_Spring")
                             walkable.SetTile(coord,grassSummer);
-                        }
                         else if(tileWalkable.name == "Wood") {
                             walkable.SetTile(coord,null);
                             obstacles.SetTile(coord,fire);
@@ -47,26 +46,22 @@ public class SeasonsControl : MonoBehaviour
                     }
                     break;
                 case 1:
-                    if(tileWalkable != null) {
-                        if(tileWalkable.name == "Grass_Summer") {
+                    if(tileWalkable != null)
+                        if(tileWalkable.name == "Grass_Summer")
                             walkable.SetTile(coord,grassAutumn);
-                        }
-                    }
-                    if(tileObstacle != null) {
+                    if(tileObstacle != null)
                         if(tileObstacle.name == "Fire") {
                             obstacles.SetTile(coord,null);
                             walkable.SetTile(coord,wood);
                         }
-                    }
                     break;
                 case 2:
                     if(tileObstacle != null && tileObstacle.name == "Water") {
                         obstacles.SetTile(coord, null);
                         walkable.SetTile(coord,ice);
                     }
-                    if(tileWalkable != null && tileWalkable.name == "Grass_Autumn") {
+                    if(tileWalkable != null && tileWalkable.name == "Grass_Autumn")
                         walkable.SetTile(coord,grassWinter);
-                    }
                     break;
                 default:
                     if(tileWalkable != null) {
@@ -81,6 +76,5 @@ public class SeasonsControl : MonoBehaviour
                     break;
                 }
             }
-        }
     }
 }

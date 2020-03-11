@@ -6,8 +6,7 @@ public class MusicScript : MonoBehaviour
 {
     public AudioSource audioSource;
 
-    void Awake()
-    {
+    void Awake() {
         DontDestroyOnLoad(gameObject);
     }
 

@@ -5,8 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class Movement : MonoBehaviour
 {
-    public float actionsPerSecond = 4f;
-    public float actionsPerSecondHelper;
+    public float actionsPerSecond = 4;
+    public float actionsPerSecondHelper = 1;
     public SeasonsControl seasonsControl;
     public SceneTraveler sceneTraveler;
     public UIController uIController;
@@ -18,11 +18,10 @@ public class Movement : MonoBehaviour
     public bool slidingOnIce = false;
     public bool won = false;
     public bool starved = false;
-    public float sceneChangeDelay = 3f;
-    public float timeUntilChange = 0f;
+    public float sceneChangeDelay = 3;
+    public float timeUntilChange = 0;
     public int hunger = 3;
     void Start() {
-        actionsPerSecondHelper = 1f;
         seasonsControl = GameObject.Find("Grid").GetComponent<SeasonsControl>();
         sceneTraveler = gameObject.GetComponent<SceneTraveler>();
         uIController = GameObject.Find("UI").GetComponent<UIController>();
@@ -32,53 +31,50 @@ public class Movement : MonoBehaviour
         winText.SetActive(false);
         lossText = GameObject.Find("LossText");
         lossText.SetActive(false);
-        for(int x = walkable.cellBounds.xMin; x <= walkable.cellBounds.xMax; x++) {
+        Vector3Int coord = new Vector3Int();
+        for(int x = walkable.cellBounds.xMin; x <= walkable.cellBounds.xMax; x++)
             for(int y = walkable.cellBounds.xMin; y <= walkable.cellBounds.yMax; y++) {
-                Vector3Int coord = new Vector3Int(x,y,0);
+                coord.x = x; coord.y = y;
                 TileBase t = walkable.GetTile(coord);
                 if(t != null && t.name == "Start") {
                     transform.position = walkable.GetCellCenterLocal(coord);
                     goto endFindStart;
                 }
             }
-        }
         endFindStart:;
     }
 
     // Update is called once per frame
     void Update() {
-        actionsPerSecondHelper += actionsPerSecond*Time.deltaTime;
-        actionsPerSecondHelper = Mathf.Min(actionsPerSecondHelper, 1);
+        actionsPerSecondHelper += actionsPerSecond * Time.deltaTime;
+        if(actionsPerSecondHelper > 1)
+            actionsPerSecondHelper = 1;
         tryChangeSeason = Input.GetButtonDown("Jump");
         if(won || starved) {
             timeUntilChange += Time.deltaTime;
             if(timeUntilChange >= sceneChangeDelay) {
-                if(won) {
+                if(won)
                     sceneTraveler.goToNextScene();
-                }
-                else {
+                else
                     sceneTraveler.restartScene();
-                }
             }
         }
         else {
-            if(!slidingOnIce) {
+            if(!slidingOnIce)
                 direction = new Vector3(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical"),0);
-            }
             if(actionsPerSecondHelper >= 1) {
                 if(changingSeason) {
-                    actionsPerSecondHelper -= 1;
+                    actionsPerSecondHelper--;
                     changingSeason = false;
                     seasonsControl.ChangeSeason();
                 }
-                else if(direction.magnitude == 1f && !tryChangeSeason && checkTileAndMove(direction)) {
-                    actionsPerSecondHelper -= 1;
-                }
+                else if(direction.magnitude == 1 && !tryChangeSeason && checkTileAndMove(direction))
+                    actionsPerSecondHelper--;
             }
             if(tryChangeSeason && hunger > 0) {
                 seasonsControl.ChangeSeason();
                 changingSeason = true;
-                actionsPerSecondHelper -= 1;
+                actionsPerSecondHelper--;
                 hunger--;
                 uIController.HungerUpdate();
                 if(hunger <= 0) {

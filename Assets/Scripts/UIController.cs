@@ -15,7 +15,6 @@ public class UIController : MonoBehaviour
     void Start() {
         tilemap = gameObject.GetComponent<Tilemap>();
         movement = GameObject.Find("Player").GetComponent<Movement>();
-        hunger = movement.hunger;
         HungerUpdate();
     }
 
@@ -24,12 +23,10 @@ public class UIController : MonoBehaviour
         hunger = movement.hunger;
         int hungerTemp = hunger;
         for(Vector3Int segment = startBar; segment.x - startBar.x < barLength; segment.x++) {
-            if(hungerTemp > 0) {
+            if(hungerTemp > 0)
                 tilemap.SetTile(segment,barFull);
-            }
-            else {
+            else
                 tilemap.SetTile(segment,barEmpty);
-            }
             hungerTemp--;
         }
     }
